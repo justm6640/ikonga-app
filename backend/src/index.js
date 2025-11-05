@@ -7,6 +7,7 @@ import { PrismaClient } from "@prisma/client";
 import { authMiddlewareFactory } from "./middleware/auth.js";
 import { createNutritionRouter } from "./nutrition.routes.js";
 import { createFitnessRouter } from "./fitness.routes.js";
+import { createWellnessRouter } from "./wellness.routes.js";
 
 const app = express();
 const prisma = new PrismaClient();
@@ -19,7 +20,6 @@ app.use(express.json());
 const JWT_SECRET = process.env.JWT_SECRET || "change-me";
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "1h";
 const SALT_ROUNDS = Number(process.env.BCRYPT_SALT_ROUNDS || 10);
-
 const allowedRoles = ["subscriber", "coach", "admin"];
 
 // healthcheck
@@ -37,11 +37,14 @@ apiRouter.post("/auth/register", async (req, res) => {
     email,
     password,
     role = "subscriber",
+    // on normalise en phaseCurrent (comme dans schema.prisma)
     phaseCurrent = "DETOX",
   } = req.body ?? {};
 
   if (!email || !password) {
-    return res.status(400).json({ error: "Email and password are required." });
+    return res
+      .status(400)
+      .json({ error: "Email and password are required." });
   }
 
   if (!allowedRoles.includes(role)) {
@@ -61,7 +64,7 @@ apiRouter.post("/auth/register", async (req, res) => {
         email,
         password: hashedPassword,
         role,
-        phaseCurrent,
+        phaseCurrent, // <-- correspond au schema
       },
       select: {
         id: true,
@@ -91,7 +94,9 @@ apiRouter.post("/auth/login", async (req, res) => {
   const { email, password } = req.body ?? {};
 
   if (!email || !password) {
-    return res.status(400).json({ error: "Email and password are required." });
+    return res
+      .status(400)
+      .json({ error: "Email and password are required." });
   }
 
   try {
@@ -139,6 +144,7 @@ apiRouter.get("/me", authMiddleware, async (req, res) => {
 // =========================
 apiRouter.use(createNutritionRouter({ prisma, authMiddleware }));
 apiRouter.use(createFitnessRouter({ prisma, authMiddleware }));
+apiRouter.use(createWellnessRouter({ prisma, authMiddleware }));
 
 // monter toutes les routes sous /api
 app.use("/api", apiRouter);

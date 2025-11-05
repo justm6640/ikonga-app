@@ -23,8 +23,10 @@ model User {
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
 
-  // relation vers les logs de sport
+  // relations
   fitnessLogs  FitnessLog[]
+  userHabits   UserHabit[]
+  moodLogs     MoodLog[]
 }
 
 model Menu {
@@ -45,8 +47,9 @@ model Recipe {
   createdAt   DateTime @default(now())
 }
 
-// --- IKOFITNESS ---
-
+// ---------------------
+// IKOFITNESS
+// ---------------------
 model Workout {
   id              String       @id @default(uuid())
   title           String
@@ -70,4 +73,41 @@ model FitnessLog {
 
   @@index([userId])
   @@index([workoutId])
+}
+
+// ---------------------
+// IKOWELLNESS
+// ---------------------
+model Habit {
+  id          String      @id @default(uuid())
+  name        String
+  description String?
+  userHabits  UserHabit[]
+}
+
+model UserHabit {
+  id      String   @id @default(uuid())
+  userId  String
+  habitId String
+  date    DateTime
+  done    Boolean  @default(false)
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, habitId, date])
+  @@index([habitId])
+  @@index([userId])
+}
+
+model MoodLog {
+  id        String   @id @default(uuid())
+  userId    String
+  mood      String
+  note      String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
 }
