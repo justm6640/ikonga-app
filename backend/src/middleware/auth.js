@@ -28,6 +28,7 @@ export function authMiddlewareFactory({ prisma }) {
           email: true,
           role: true,
           phaseCurrent: true,
+          phase_current: true,
           createdAt: true,
           updatedAt: true,
         },
