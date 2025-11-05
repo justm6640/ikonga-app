@@ -130,14 +130,14 @@ export default function LoginPage() {
           align-items: center;
           justify-content: center;
           padding: 3rem 1.5rem 4rem;
-          background: linear-gradient(160deg, #fdeee6 0%, #fff7f2 50%, #ffffff 100%);
+          background: linear-gradient(160deg, #ede9ff 0%, #f6f2ff 50%, #ffffff 100%);
         }
 
         .login-card {
           width: min(420px, 100%);
           background: #ffffff;
           border-radius: 24px;
-          box-shadow: 0 24px 55px rgba(250, 134, 98, 0.2);
+          box-shadow: 0 24px 55px rgba(124, 58, 237, 0.22);
           padding: 2.75rem 2.5rem 3rem;
           display: flex;
           flex-direction: column;
@@ -148,7 +148,7 @@ export default function LoginPage() {
           align-self: flex-start;
           font-size: 0.95rem;
           font-weight: 500;
-          color: #fa8662;
+          color: #7c3aed;
           text-decoration: none;
           transition: opacity 0.2s ease;
         }
@@ -162,12 +162,12 @@ export default function LoginPage() {
           margin: 0;
           font-size: clamp(1.9rem, 3vw, 2.4rem);
           font-weight: 600;
-          color: #1f2937;
+          color: #1f1636;
         }
 
         .subtitle {
           margin: 0;
-          color: #6b7280;
+          color: #5d5277;
           line-height: 1.6;
         }
 
@@ -182,11 +182,11 @@ export default function LoginPage() {
           gap: 0.55rem;
           font-size: 0.95rem;
           font-weight: 500;
-          color: #1f2937;
+          color: #1f1636;
         }
 
         input {
-          border: 1px solid #f2f4f7;
+          border: 1px solid #e4daff;
           border-radius: 14px;
           padding: 0.85rem 1rem;
           font-size: 1rem;
@@ -195,8 +195,8 @@ export default function LoginPage() {
 
         input:focus {
           outline: none;
-          border-color: #fa8662;
-          box-shadow: 0 0 0 3px rgba(250, 134, 98, 0.18);
+          border-color: #7c3aed;
+          box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.18);
         }
 
         .error-message {
@@ -212,7 +212,7 @@ export default function LoginPage() {
           border: none;
           border-radius: 999px;
           padding: 0.9rem 1.6rem;
-          background: #fa8662;
+          background: #7c3aed;
           color: white;
           font-weight: 600;
           font-size: 1rem;
@@ -222,7 +222,7 @@ export default function LoginPage() {
 
         .submit-button:hover {
           transform: translateY(-1px);
-          box-shadow: 0 18px 36px rgba(250, 134, 98, 0.25);
+          box-shadow: 0 18px 36px rgba(124, 58, 237, 0.28);
         }
 
         .submit-button:disabled {

@@ -1,12 +1,12 @@
 :root {
-  --color-primary: #fa8662;
-  --color-background: #fef9f7;
+  --color-primary: #7c3aed;
+  --color-background: #f5f0ff;
   --color-surface: #ffffff;
-  --color-text: #1f2937;
-  --color-muted: #4b5563;
-  --color-border: #f2f4f7;
+  --color-text: #1f1636;
+  --color-muted: #5d5277;
+  --color-border: #e4daff;
   --radius-lg: 20px;
-  --shadow-soft: 0 20px 45px rgba(250, 134, 98, 0.15);
+  --shadow-soft: 0 20px 45px rgba(124, 58, 237, 0.18);
   color-scheme: light;
 }
 
@@ -32,7 +32,7 @@ a {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, rgba(250, 134, 98, 0.08) 0%, rgba(255, 255, 255, 0) 55%),
+  background: linear-gradient(180deg, rgba(124, 58, 237, 0.08) 0%, rgba(255, 255, 255, 0) 55%),
     var(--color-background);
 }
 
@@ -92,7 +92,7 @@ a {
 
 .nav-link:hover,
 .nav-link:focus-visible {
-  background: rgba(250, 134, 98, 0.12);
+  background: rgba(124, 58, 237, 0.12);
   color: var(--color-primary);
 }
 
@@ -149,7 +149,7 @@ input {
 input:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(250, 134, 98, 0.2);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
 }
 
 button {
@@ -166,7 +166,7 @@ button {
 
 button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 15px 30px rgba(250, 134, 98, 0.25);
+  box-shadow: 0 15px 30px rgba(124, 58, 237, 0.25);
 }
 
 button:disabled {
