@@ -1,3 +1,16 @@
+import { Router } from 'express';
+
+function getTodayUtcDate() {
+  const now = new Date();
+  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+}
+
+export function createWellnessRouter(prisma, authMiddleware) {
+  const router = Router();
+
+  router.use(authMiddleware);
+
+  router.get('/habits', async (req, res) => {
 import express from 'express';
 
 export function createWellnessRouter({ prisma, authMiddleware }) {
@@ -21,6 +34,15 @@ export function createWellnessRouter({ prisma, authMiddleware }) {
 
       return res.json({ habits });
     } catch (error) {
+      return res.status(500).json({ message: 'Unable to fetch habits' });
+    }
+  });
+
+  router.post('/habits/check', async (req, res) => {
+    const { habitId, done = true } = req.body ?? {};
+
+    if (!habitId) {
+      return res.status(400).json({ message: 'habitId is required' });
       console.error('Error fetching habits:', error);
       return res.status(500).json({ error: 'Unable to fetch habits.' });
     }
@@ -37,6 +59,10 @@ export function createWellnessRouter({ prisma, authMiddleware }) {
       const habit = await prisma.habit.findUnique({ where: { id: habitId } });
 
       if (!habit) {
+        return res.status(404).json({ message: 'Habit not found' });
+      }
+
+      const today = getTodayUtcDate();
         return res.status(404).json({ error: 'Habit not found.' });
       }
 
@@ -57,6 +83,15 @@ export function createWellnessRouter({ prisma, authMiddleware }) {
           userId_habitId_date: {
             userId: req.user.id,
             habitId,
+            date: today,
+          },
+        },
+        update: { done },
+        create: {
+          userId: req.user.id,
+          habitId,
+          date: today,
+          done,
             date: targetDate,
           },
         },
@@ -76,6 +111,15 @@ export function createWellnessRouter({ prisma, authMiddleware }) {
 
       return res.status(201).json({ userHabit });
     } catch (error) {
+      return res.status(500).json({ message: 'Unable to check habit' });
+    }
+  });
+
+  router.post('/mood', async (req, res) => {
+    const { mood, note } = req.body ?? {};
+
+    if (!mood) {
+      return res.status(400).json({ message: 'mood is required' });
       console.error('Error checking habit:', error);
       return res.status(500).json({ error: 'Unable to record habit.' });
     }
@@ -93,12 +137,14 @@ export function createWellnessRouter({ prisma, authMiddleware }) {
         data: {
           userId: req.user.id,
           mood,
+          note,
           note: note ?? null,
         },
       });
 
       return res.status(201).json({ moodLog });
     } catch (error) {
+      return res.status(500).json({ message: 'Unable to log mood' });
       console.error('Error logging mood:', error);
       return res.status(500).json({ error: 'Unable to log mood.' });
     }

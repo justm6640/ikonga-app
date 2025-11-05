@@ -19,6 +19,8 @@ model User {
   sentMessages  CoachMessage[] @relation("CoachMessagesFrom")
   receivedMessages CoachMessage[] @relation("CoachMessagesTo")
   progressEntries Progress[]
+  userHabits      UserHabit[]
+  moodLogs        MoodLog[]
 }
 
 enum UserRole {
@@ -61,6 +63,40 @@ model Progress {
   weight    Float?
   notes     String?
   phase     String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Habit {
+  id          String      @id @default(uuid())
+  name        String
+  description String?
+
+  userHabits UserHabit[]
+}
+
+model UserHabit {
+  id      String   @id @default(uuid())
+  userId  String
+  habitId String
+  date    DateTime
+  done    Boolean  @default(false)
+
+  user  User  @relation(fields: [userId], references: [id])
+  habit Habit @relation(fields: [habitId], references: [id])
+
+  @@unique([userId, habitId, date])
+}
+
+model MoodLog {
+  id        String   @id @default(uuid())
+  userId    String
+  mood      String
+  note      String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id])
