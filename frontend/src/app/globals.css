@@ -1,12 +1,13 @@
 :root {
-  --color-primary: #7c3aed;
-  --color-background: #f5f0ff;
-  --color-surface: #ffffff;
-  --color-text: #1f1636;
-  --color-muted: #5d5277;
-  --color-border: #e4daff;
+  --color-primary: #fa8662;
+  --color-primary-dark: #e4603c;
+  --color-background: #fdeee6;
+  --color-surface: #fff7f2;
+  --color-text: #2f2622;
+  --color-muted: #6d5a54;
+  --color-border: #f4c7b4;
   --radius-lg: 20px;
-  --shadow-soft: 0 20px 45px rgba(124, 58, 237, 0.18);
+  --shadow-soft: 0 20px 45px rgba(250, 134, 98, 0.18);
   color-scheme: light;
 }
 
@@ -21,7 +22,16 @@ body {
   min-height: 100%;
   background: var(--color-background);
   color: var(--color-text);
-  font-family: var(--font-family, 'Poppins', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+  font-family: var(
+    --font-family,
+    'Poppins',
+    'Inter',
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif
+  );
 }
 
 a {
@@ -33,38 +43,45 @@ a {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, rgba(124, 58, 237, 0.08) 0%, rgba(255, 255, 255, 0) 55%),
+  background: radial-gradient(circle at 10% -10%, rgba(250, 134, 98, 0.15) 0%, transparent 45%),
+    radial-gradient(circle at 90% 0%, rgba(233, 95, 55, 0.08) 0%, transparent 40%),
     var(--color-background);
+}
+
+.app-shell--auth {
+  background: var(--color-background);
 }
 
 .app-header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 2.5rem;
-  background: rgba(255, 255, 255, 0.9);
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: rgba(255, 247, 242, 0.95);
+  border-bottom: 1px solid rgba(244, 199, 180, 0.6);
   position: sticky;
   top: 0;
   z-index: 10;
   backdrop-filter: blur(12px);
-  box-shadow: 0 12px 30px rgba(50, 50, 50, 0.08);
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  justify-content: center;
+  gap: 0.75rem;
   font-weight: 700;
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   color: var(--color-primary);
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
 .brand-mark {
-  width: 42px;
-  height: 42px;
-  border-radius: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
   display: inline-flex;
   align-items: center;
@@ -75,8 +92,11 @@ a {
 
 .app-nav {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 1.25rem;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.25rem 0;
 }
 
 .nav-link {
@@ -85,25 +105,27 @@ a {
   padding: 0.45rem 0.9rem;
   border-radius: 999px;
   transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
 }
 
 .nav-link:hover,
 .nav-link:focus-visible {
-  background: rgba(124, 58, 237, 0.12);
+  background: rgba(250, 134, 98, 0.14);
   color: var(--color-primary);
   transform: translateY(-1px);
 }
 
 .nav-link.is-active {
-  background: rgba(250, 134, 98, 0.18);
+  background: rgba(250, 134, 98, 0.22);
   color: var(--color-primary);
 }
 
 .logout-button {
-  padding: 0.65rem 1.2rem;
+  align-self: center;
+  padding: 0.7rem 1.3rem;
   border-radius: 999px;
   border: none;
-  background: var(--color-primary);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
   color: #ffffff;
   font-weight: 600;
   font-size: 0.95rem;
@@ -113,8 +135,7 @@ a {
 
 .logout-button:hover,
 .logout-button:focus-visible {
-  background: var(--color-primary-dark);
-  box-shadow: 0 15px 30px rgba(250, 134, 98, 0.22);
+  box-shadow: 0 16px 32px rgba(250, 134, 98, 0.25);
   transform: translateY(-1px);
 }
 
@@ -122,20 +143,53 @@ a {
   transform: translateY(0);
 }
 
+@media (min-width: 768px) {
+  .app-header {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1rem 2rem;
+  }
+
+  .brand {
+    justify-content: flex-start;
+  }
+
+  .app-nav {
+    justify-content: center;
+    flex: 1;
+  }
+
+  .logout-button {
+    align-self: auto;
+  }
+}
+
 .app-main {
   flex: 1;
   width: min(1100px, 100%);
   margin: 0 auto;
-  padding: 3rem 1.5rem 4rem;
+  padding: 2.5rem 1.5rem 4rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
 }
 
+.auth-main {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 2.5rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-background);
+}
+
 .page-card {
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--color-surface);
   border-radius: var(--radius-lg);
-  padding: 2.75rem;
+  padding: 2.5rem;
   box-shadow: var(--shadow-soft);
 }
 
@@ -172,19 +226,20 @@ input {
   font-size: 1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   background: rgba(255, 255, 255, 0.95);
+  color: var(--color-text);
 }
 
 input:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+  box-shadow: 0 0 0 3px rgba(250, 134, 98, 0.2);
 }
 
 button {
   padding: 0.85rem 1.6rem;
   border-radius: 999px;
   border: none;
-  background: var(--color-primary);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
   color: white;
   font-weight: 600;
   font-size: 1rem;
@@ -194,7 +249,7 @@ button {
 
 button:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 15px 30px rgba(124, 58, 237, 0.25);
+  box-shadow: 0 15px 30px rgba(250, 134, 98, 0.25);
 }
 
 button:disabled {

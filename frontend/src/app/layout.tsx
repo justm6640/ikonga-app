@@ -1,7 +1,8 @@
 import './globals.css';
 import type { ReactNode } from 'react';
 import { Poppins } from 'next/font/google';
-import { AppHeader } from '../components/AppHeader';
+
+import { AppShell } from '../components/AppShell';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -17,10 +18,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fr" className={poppins.className}>
       <body>
-        <div className="app-shell">
-          <AppHeader />
-          <main className="app-main">{children}</main>
-        </div>
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );
