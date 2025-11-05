@@ -24,6 +24,9 @@ app.use('/beauty', beautyRouter);
 app.use('/coaching', coachingRouter);
 app.use('/wellness', wellnessRouter);
 
+app.use('/beauty', beautyRouter);
+app.use('/coaching', coachingRouter);
+
 app.post('/auth/register', async (req, res) => {
   const { email, password, role = 'subscriber', phase_current = '' } = req.body ?? {};
 

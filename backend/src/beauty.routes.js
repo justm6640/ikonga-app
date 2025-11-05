@@ -5,6 +5,7 @@ export function createBeautyRouter(prisma, authMiddleware) {
 
   router.get('/routines', async (req, res) => {
     const phase = typeof req.query.phase === 'string' ? req.query.phase.trim() : undefined;
+    const { phase } = req.query;
 
     try {
       const routines = await prisma.beautyRoutine.findMany({
@@ -26,6 +27,8 @@ export function createBeautyRouter(prisma, authMiddleware) {
       typeof description === 'string' ? description.trim() : '';
 
     if (!trimmedTitle || !trimmedDescription || !trimmedPhase) {
+
+    if (!title || !description || !phase) {
       return res
         .status(400)
         .json({ message: 'Title, description, and phase are required' });
@@ -38,6 +41,7 @@ export function createBeautyRouter(prisma, authMiddleware) {
     try {
       const routine = await prisma.beautyRoutine.create({
         data: { title: trimmedTitle, description: trimmedDescription, phase: trimmedPhase },
+        data: { title, description, phase },
       });
 
       return res.status(201).json({ routine });
@@ -51,6 +55,8 @@ export function createBeautyRouter(prisma, authMiddleware) {
     const trimmedImageUrl = typeof imageUrl === 'string' ? imageUrl.trim() : '';
 
     if (!trimmedImageUrl) {
+
+    if (!imageUrl) {
       return res.status(400).json({ message: 'imageUrl is required' });
     }
 
@@ -68,6 +74,7 @@ export function createBeautyRouter(prisma, authMiddleware) {
       const photo = await prisma.beautyPhoto.create({
         data: {
           imageUrl: trimmedImageUrl,
+          imageUrl,
           userId: req.user.id,
           ...(parsedTakenAt ? { takenAt: parsedTakenAt } : {}),
         },
