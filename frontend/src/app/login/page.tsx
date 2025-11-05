@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { FormEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -77,17 +78,17 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="login-screen">
-      <div className="login-card" role="main">
-        <div className="login-logo" aria-hidden="true">
-          <span className="logo-mark">IK</span>
-          <span className="logo-type">IKONGA</span>
+    <section className="auth-container">
+      <div className="auth-card" role="main">
+        <div className="auth-brand" aria-hidden="true">
+          <span className="auth-brand-mark">IK</span>
+          <span className="auth-brand-name">Ikonga</span>
         </div>
-        <h1>Connexion IKONGA</h1>
-        <p className="login-intro">
-          Connecte-toi pour accéder à ton espace nutrition, fitness et bien-être.
-        </p>
-        <form className="login-form" onSubmit={handleSubmit} noValidate>
+        <header className="auth-heading">
+          <h1>Connexion</h1>
+          <p>Accède à ton espace Ikonga pour suivre tes programmes nutrition et fitness.</p>
+        </header>
+        <form className="auth-form" onSubmit={handleSubmit} noValidate>
           <label htmlFor="email">
             Adresse email
             <input
@@ -117,141 +118,215 @@ export default function LoginPage() {
             />
           </label>
           {error ? (
-            <p className="login-error" role="alert">
+            <p className="auth-error" role="alert">
               {error}
             </p>
           ) : null}
-          <button type="submit" disabled={loading} className="login-button">
+          <button type="submit" disabled={loading} className="auth-submit">
             {loading ? 'Connexion en cours…' : 'Se connecter'}
           </button>
         </form>
+        <div className="auth-actions">
+          <Link href="/forgot-password" className="forgot-link">
+            Mot de passe oublié ?
+          </Link>
+          <button
+            type="button"
+            className="auth-secondary"
+            onClick={() => router.push('/register')}
+          >
+            Créer un compte
+          </button>
+        </div>
       </div>
       <style jsx>{`
-        .login-screen {
-          min-height: calc(100vh - 120px);
+        .auth-container {
+          width: 100%;
+          min-height: 100vh;
           display: flex;
-          align-items: center;
           justify-content: center;
-          padding: 3rem 1.5rem 4rem;
-          background: linear-gradient(160deg, #ede9ff 0%, #f6f2ff 50%, #ffffff 100%);
+          align-items: center;
+          padding: 3rem 1.5rem;
+          background: #fdeee6;
         }
 
-        .login-card {
-          width: min(440px, 100%);
-          background: #ffffff;
+        .auth-card {
+          width: 100%;
+          max-width: 400px;
+          background: #fff7f2;
           border-radius: 24px;
-          box-shadow: 0 24px 55px rgba(124, 58, 237, 0.22);
-          padding: 2.75rem 2.5rem 3rem;
+          padding: 2.5rem 1.75rem;
           display: flex;
           flex-direction: column;
           gap: 1.75rem;
+          box-shadow: 0 20px 45px rgba(250, 134, 98, 0.18);
         }
 
-        .back-link {
-          align-self: flex-start;
-          font-size: 0.95rem;
-          font-weight: 500;
-          color: #7c3aed;
-          text-decoration: none;
-          transition: opacity 0.2s ease;
+        .auth-brand {
+          display: flex;
+          flex-direction: column;
+          gap: 0.6rem;
+          align-items: center;
+          text-transform: uppercase;
+          letter-spacing: 0.32em;
+          color: #3d342f;
         }
 
-        .logo-mark {
-          width: 50px;
-          height: 50px;
+        .auth-brand-mark {
+          width: 56px;
+          height: 56px;
           border-radius: 18px;
-          background: linear-gradient(135deg, #fa8662, #e66d47);
+          background: linear-gradient(135deg, #fa8662 0%, #e95f37 100%);
           display: inline-flex;
           align-items: center;
           justify-content: center;
           color: #ffffff;
+          font-weight: 700;
           font-size: 1.1rem;
           letter-spacing: normal;
         }
 
-        .logo-type {
-          font-size: 1.2rem;
-        }
-
-        h1 {
-          margin: 0;
-          font-size: clamp(1.9rem, 3vw, 2.4rem);
+        .auth-brand-name {
+          font-size: 1rem;
           font-weight: 600;
-          color: #1f1636;
         }
 
-        .login-intro {
+        .auth-heading {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+          text-align: center;
+          color: #2f2622;
+        }
+
+        .auth-heading h1 {
           margin: 0;
-          color: #5d5277;
-          line-height: 1.6;
+          font-size: 2rem;
+          font-weight: 600;
         }
 
-        .login-form {
+        .auth-heading p {
+          margin: 0;
+          font-size: 0.95rem;
+          line-height: 1.6;
+          color: #5f524d;
+        }
+
+        .auth-form {
           display: grid;
           gap: 1.25rem;
         }
 
         label {
+          display: grid;
+          gap: 0.5rem;
           font-size: 0.95rem;
           font-weight: 500;
-          color: #1f1636;
+          color: #2f2622;
         }
 
         input {
-          border: 1px solid #e4daff;
+          appearance: none;
+          border: 1px solid #f2c3b0;
           border-radius: 14px;
-          border: 1px solid #f5cdbb;
           padding: 0.85rem 1rem;
           font-size: 1rem;
+          background: #ffffff;
+          color: #2f2622;
           transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input::placeholder {
+          color: #9a8a83;
         }
 
         input:focus {
           outline: none;
-          border-color: #7c3aed;
-          box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.18);
+          border-color: #fa8662;
+          box-shadow: 0 0 0 3px rgba(250, 134, 98, 0.28);
         }
 
-        .login-error {
+        .auth-error {
           margin: 0;
-          font-size: 0.9rem;
-          color: #d14343;
+          font-size: 0.92rem;
+          color: #b3261e;
+          background: rgba(179, 38, 30, 0.12);
+          padding: 0.75rem 1rem;
+          border-radius: 12px;
         }
 
-        .login-button {
-          background: linear-gradient(135deg, #fa8662, #f56b3f);
+        .auth-submit {
           border-radius: 999px;
-          padding: 0.9rem 1.6rem;
-          background: #7c3aed;
-          color: white;
+          padding: 0.95rem 1.5rem;
+          background: linear-gradient(135deg, #fa8662 0%, #e95f37 100%);
+          color: #ffffff;
           font-weight: 600;
+          font-size: 1rem;
           border: none;
-          color: white;
+          cursor: pointer;
           transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .login-button:hover:not(:disabled) {
+        .auth-submit:hover:not(:disabled) {
           transform: translateY(-1px);
-          box-shadow: 0 18px 36px rgba(124, 58, 237, 0.28);
+          box-shadow: 0 18px 32px rgba(250, 134, 98, 0.25);
         }
 
-        .login-button:disabled {
+        .auth-submit:disabled {
           opacity: 0.65;
           cursor: not-allowed;
           transform: none;
           box-shadow: none;
         }
 
-        @media (max-width: 480px) {
-          .login-card {
-            padding: 2.5rem 1.85rem;
+        .auth-actions {
+          display: grid;
+          gap: 1.25rem;
+        }
+
+        .forgot-link {
+          font-size: 0.9rem;
+          color: #6f625a;
+          text-decoration: none;
+          justify-self: center;
+        }
+
+        .forgot-link:hover,
+        .forgot-link:focus {
+          text-decoration: underline;
+        }
+
+        .auth-secondary {
+          border-radius: 999px;
+          padding: 0.9rem 1.5rem;
+          background: #ffffff;
+          border: 2px solid #fa8662;
+          color: #fa8662;
+          font-weight: 600;
+          font-size: 0.95rem;
+          cursor: pointer;
+          transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .auth-secondary:hover {
+          background: rgba(250, 134, 98, 0.08);
+          box-shadow: 0 12px 24px rgba(250, 134, 98, 0.12);
+        }
+
+        @media (min-width: 640px) {
+          .auth-card {
+            padding: 3rem 2.5rem;
           }
 
-          .login-logo {
-            letter-spacing: 0.35rem;
+          .auth-heading h1 {
+            font-size: 2.2rem;
+          }
+
+          .forgot-link {
+            justify-self: start;
           }
         }
       `}</style>
-    </div>
+    </section>
   );
 }
