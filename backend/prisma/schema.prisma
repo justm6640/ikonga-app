@@ -14,14 +14,17 @@ enum UserRole {
 }
 
 model User {
-  id            String   @id @default(uuid())
-  email         String   @unique
-  password      String
-  role          UserRole @default(subscriber)
-  phase_current String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  fitnessLogs   FitnessLog[]
+  id           String       @id @default(uuid())
+  email        String       @unique
+  password     String
+  role         UserRole     @default(subscriber)
+  // phase actuelle de l'abonné (DETOX, EQUILIBRE, etc.)
+  phaseCurrent String       @default("DETOX")
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  // relation vers les logs de sport
+  fitnessLogs  FitnessLog[]
 }
 
 model Menu {
@@ -34,22 +37,25 @@ model Menu {
 }
 
 model Recipe {
-  id        String   @id @default(uuid())
-  title     String
+  id          String   @id @default(uuid())
+  title       String
   ingredients Json
-  steps     Json
-  phase     String?
-  createdAt DateTime @default(now())
+  steps       Json
+  phase       String?
+  createdAt   DateTime @default(now())
 }
 
+// --- IKOFITNESS ---
+
 model Workout {
-  id              String        @id @default(uuid())
+  id              String       @id @default(uuid())
   title           String
   description     String?
   phase           String
   videoUrl        String?
   durationMinutes Int?
-  createdAt       DateTime      @default(now())
+  createdAt       DateTime     @default(now())
+
   logs            FitnessLog[]
 }
 
