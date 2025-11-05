@@ -22,3 +22,102 @@ enum UserRole {
   coach
   admin
 }
+
+model User {
+  id           String       @id @default(uuid())
+  email        String       @unique
+  password     String
+  role         UserRole     @default(subscriber)
+  // phase actuelle de l'abonné (DETOX, EQUILIBRE, etc.)
+  phaseCurrent String       @default("DETOX")
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  // relations
+  fitnessLogs  FitnessLog[]
+  userHabits   UserHabit[]
+  moodLogs     MoodLog[]
+}
+
+model Menu {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  phase       String
+  day         Int?
+  createdAt   DateTime @default(now())
+}
+
+model Recipe {
+  id          String   @id @default(uuid())
+  title       String
+  ingredients Json
+  steps       Json
+  phase       String?
+  createdAt   DateTime @default(now())
+}
+
+// ---------------------
+// IKOFITNESS
+// ---------------------
+model Workout {
+  id              String       @id @default(uuid())
+  title           String
+  description     String?
+  phase           String
+  videoUrl        String?
+  durationMinutes Int?
+  createdAt       DateTime     @default(now())
+
+  logs            FitnessLog[]
+}
+
+model FitnessLog {
+  id        String   @id @default(uuid())
+  userId    String
+  workoutId String
+  doneAt    DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workout Workout @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([workoutId])
+}
+
+// ---------------------
+// IKOWELLNESS
+// ---------------------
+model Habit {
+  id          String      @id @default(uuid())
+  name        String
+  description String?
+  userHabits  UserHabit[]
+}
+
+model UserHabit {
+  id      String   @id @default(uuid())
+  userId  String
+  habitId String
+  date    DateTime
+  done    Boolean  @default(false)
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, habitId, date])
+  @@index([habitId])
+  @@index([userId])
+}
+
+model MoodLog {
+  id        String   @id @default(uuid())
+  userId    String
+  mood      String
+  note      String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
