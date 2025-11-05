@@ -142,17 +142,14 @@ export default function LoginPage() {
       <style jsx>{`
         .auth-container {
           width: 100%;
-          min-height: 100vh;
           display: flex;
           justify-content: center;
           align-items: center;
-          padding: 3rem 1.5rem;
-          background: #fdeee6;
         }
 
         .auth-card {
           width: 100%;
-          max-width: 400px;
+          max-width: 420px;
           background: #fff7f2;
           border-radius: 24px;
           padding: 2.5rem 1.75rem;
@@ -279,40 +276,6 @@ export default function LoginPage() {
           box-shadow: none;
         }
 
-        .auth-actions {
-          display: grid;
-          gap: 1.25rem;
-        }
-
-        .forgot-link {
-          font-size: 0.9rem;
-          color: #6f625a;
-          text-decoration: none;
-          justify-self: center;
-        }
-
-        .forgot-link:hover,
-        .forgot-link:focus {
-          text-decoration: underline;
-        }
-
-        .auth-secondary {
-          border-radius: 999px;
-          padding: 0.9rem 1.5rem;
-          background: #ffffff;
-          border: 2px solid #fa8662;
-          color: #fa8662;
-          font-weight: 600;
-          font-size: 0.95rem;
-          cursor: pointer;
-          transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .auth-secondary:hover {
-          background: rgba(250, 134, 98, 0.08);
-          box-shadow: 0 12px 24px rgba(250, 134, 98, 0.12);
-        }
-
         @media (min-width: 640px) {
           .auth-card {
             padding: 3rem 2.5rem;
@@ -320,10 +283,6 @@ export default function LoginPage() {
 
           .auth-heading h1 {
             font-size: 2.2rem;
-          }
-
-          .forgot-link {
-            justify-self: start;
           }
         }
       `}</style>
