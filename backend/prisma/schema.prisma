@@ -14,13 +14,17 @@ enum UserRole {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
+  id           String       @id @default(uuid())
+  email        String       @unique
   password     String
-  role         UserRole @default(subscriber)
-  phaseCurrent String   @default("DETOX")
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  role         UserRole     @default(subscriber)
+  // phase actuelle de l'abonné (DETOX, EQUILIBRE, etc.)
+  phaseCurrent String       @default("DETOX")
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  // relation vers les logs de sport
+  fitnessLogs  FitnessLog[]
 }
 
 model Menu {
@@ -39,4 +43,31 @@ model Recipe {
   steps       Json
   phase       String?
   createdAt   DateTime @default(now())
+}
+
+// --- IKOFITNESS ---
+
+model Workout {
+  id              String       @id @default(uuid())
+  title           String
+  description     String?
+  phase           String
+  videoUrl        String?
+  durationMinutes Int?
+  createdAt       DateTime     @default(now())
+
+  logs            FitnessLog[]
+}
+
+model FitnessLog {
+  id        String   @id @default(uuid())
+  userId    String
+  workoutId String
+  doneAt    DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workout Workout @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([workoutId])
 }
