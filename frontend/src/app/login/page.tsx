@@ -1,14 +1,15 @@
 'use client';
 
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { FormEvent, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface LoginResponse {
   token?: string;
-  user?: unknown;
+  user?: Record<string, unknown>;
   message?: string;
 }
+
+const API_ERROR_MESSAGE = 'Connexion impossible. Vérifiez vos identifiants.';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -22,9 +23,9 @@ export default function LoginPage() {
       return;
     }
 
-    const existingToken = localStorage.getItem('ikonga_token');
-    if (existingToken) {
-      router.replace('/');
+    const token = localStorage.getItem('ikonga_token');
+    if (token) {
+      router.replace('/dashboard');
     }
   }, [router]);
 
@@ -58,8 +59,7 @@ export default function LoginPage() {
       const data: LoginResponse = await response.json().catch(() => ({}));
 
       if (!response.ok || !data.token) {
-        const message = data.message ?? 'Connexion impossible. Vérifiez vos identifiants.';
-        throw new Error(message);
+        throw new Error(data.message ?? API_ERROR_MESSAGE);
       }
 
       if (typeof window !== 'undefined') {
@@ -67,25 +67,28 @@ export default function LoginPage() {
         localStorage.setItem('ikonga_user', JSON.stringify(data.user ?? {}));
       }
 
-      router.push('/');
+      router.replace('/dashboard');
     } catch (submissionError) {
-      const message = submissionError instanceof Error ? submissionError.message : null;
-      setError(message ?? 'Une erreur inattendue est survenue.');
+      const message = submissionError instanceof Error ? submissionError.message : API_ERROR_MESSAGE;
+      setError(message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="login-page">
-      <div className="login-card">
-        <Link href="/" className="back-link" aria-label="Retour à l\'accueil">
-          ← Retour
-        </Link>
+    <div className="login-screen">
+      <div className="login-card" role="main">
+        <div className="login-logo" aria-hidden="true">
+          <span className="logo-mark">IK</span>
+          <span className="logo-type">IKONGA</span>
+        </div>
         <h1>Connexion IKONGA</h1>
-        <p className="subtitle">Connecte-toi pour accéder à ton programme personnalisé.</p>
-        <form onSubmit={handleSubmit} className="login-form">
-          <label htmlFor="email" className="field-label">
+        <p className="login-intro">
+          Connecte-toi pour accéder à ton espace nutrition, fitness et bien-être.
+        </p>
+        <form className="login-form" onSubmit={handleSubmit} noValidate>
+          <label htmlFor="email">
             Adresse email
             <input
               id="email"
@@ -99,7 +102,7 @@ export default function LoginPage() {
               required
             />
           </label>
-          <label htmlFor="password" className="field-label">
+          <label htmlFor="password">
             Mot de passe
             <input
               id="password"
@@ -114,80 +117,92 @@ export default function LoginPage() {
             />
           </label>
           {error ? (
-            <p role="alert" className="error-message">
+            <p className="login-error" role="alert">
               {error}
             </p>
           ) : null}
-          <button type="submit" disabled={loading} className="submit-button">
+          <button type="submit" disabled={loading} className="login-button">
             {loading ? 'Connexion en cours…' : 'Se connecter'}
           </button>
         </form>
       </div>
       <style jsx>{`
-        .login-page {
-          width: 100%;
+        .login-screen {
+          min-height: calc(100vh - 120px);
           display: flex;
           align-items: center;
           justify-content: center;
           padding: 3rem 1.5rem 4rem;
-          background: linear-gradient(160deg, #fdeee6 0%, #fff7f2 50%, #ffffff 100%);
+          background: radial-gradient(circle at top right, rgba(250, 134, 98, 0.14), transparent 60%),
+            radial-gradient(circle at bottom left, rgba(250, 134, 98, 0.1), transparent 55%),
+            #fdeee6;
         }
 
         .login-card {
-          width: min(420px, 100%);
+          width: min(440px, 100%);
           background: #ffffff;
-          border-radius: 24px;
-          box-shadow: 0 24px 55px rgba(250, 134, 98, 0.2);
-          padding: 2.75rem 2.5rem 3rem;
+          border-radius: 28px;
+          box-shadow: 0 28px 65px rgba(250, 134, 98, 0.22);
+          padding: 3rem 3rem 3.25rem;
           display: flex;
           flex-direction: column;
           gap: 1.75rem;
         }
 
-        .back-link {
-          align-self: flex-start;
-          font-size: 0.95rem;
-          font-weight: 500;
+        .login-logo {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
           color: #fa8662;
-          text-decoration: none;
-          transition: opacity 0.2s ease;
+          font-weight: 700;
+          letter-spacing: 0.5rem;
         }
 
-        .back-link:hover,
-        .back-link:focus-visible {
-          opacity: 0.7;
+        .logo-mark {
+          width: 50px;
+          height: 50px;
+          border-radius: 18px;
+          background: linear-gradient(135deg, #fa8662, #e66d47);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          color: #ffffff;
+          font-size: 1.1rem;
+          letter-spacing: normal;
+        }
+
+        .logo-type {
+          font-size: 1.2rem;
         }
 
         h1 {
           margin: 0;
-          font-size: clamp(1.9rem, 3vw, 2.4rem);
-          font-weight: 600;
-          color: #1f2937;
+          font-size: clamp(1.9rem, 4vw, 2.4rem);
+          color: #333333;
         }
 
-        .subtitle {
+        .login-intro {
           margin: 0;
-          color: #6b7280;
+          color: #5c5a57;
           line-height: 1.6;
         }
 
         .login-form {
           display: grid;
-          gap: 1.4rem;
+          gap: 1.25rem;
         }
 
-        .field-label {
-          display: flex;
-          flex-direction: column;
-          gap: 0.55rem;
+        label {
           font-size: 0.95rem;
-          font-weight: 500;
-          color: #1f2937;
+          font-weight: 600;
+          color: #4a4947;
+          display: grid;
+          gap: 0.5rem;
         }
 
         input {
-          border: 1px solid #f2f4f7;
           border-radius: 14px;
+          border: 1px solid #f5cdbb;
           padding: 0.85rem 1rem;
           font-size: 1rem;
           transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -199,43 +214,42 @@ export default function LoginPage() {
           box-shadow: 0 0 0 3px rgba(250, 134, 98, 0.18);
         }
 
-        .error-message {
+        .login-error {
           margin: 0;
-          padding: 0.85rem 1rem;
-          border-radius: 12px;
-          background: rgba(220, 38, 38, 0.08);
-          color: #b91c1c;
-          font-size: 0.95rem;
+          font-size: 0.9rem;
+          color: #d14343;
         }
 
-        .submit-button {
-          border: none;
+        .login-button {
+          background: linear-gradient(135deg, #fa8662, #f56b3f);
           border-radius: 999px;
-          padding: 0.9rem 1.6rem;
-          background: #fa8662;
-          color: white;
+          padding: 0.95rem 1.5rem;
+          font-size: 1.05rem;
           font-weight: 600;
-          font-size: 1rem;
-          cursor: pointer;
-          transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+          border: none;
+          color: white;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .submit-button:hover {
+        .login-button:hover:not(:disabled) {
           transform: translateY(-1px);
-          box-shadow: 0 18px 36px rgba(250, 134, 98, 0.25);
+          box-shadow: 0 18px 35px rgba(250, 134, 98, 0.26);
         }
 
-        .submit-button:disabled {
+        .login-button:disabled {
           opacity: 0.65;
           cursor: not-allowed;
           transform: none;
           box-shadow: none;
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 480px) {
           .login-card {
-            padding: 2.25rem 1.75rem 2.5rem;
-            border-radius: 20px;
+            padding: 2.5rem 1.85rem;
+          }
+
+          .login-logo {
+            letter-spacing: 0.35rem;
           }
         }
       `}</style>
