@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { FormEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -125,6 +126,18 @@ export default function LoginPage() {
             {loading ? 'Connexion en cours…' : 'Se connecter'}
           </button>
         </form>
+        <div className="auth-actions">
+          <Link href="/forgot-password" className="forgot-link">
+            Mot de passe oublié ?
+          </Link>
+          <button
+            type="button"
+            className="auth-secondary"
+            onClick={() => router.push('/register')}
+          >
+            Créer un compte
+          </button>
+        </div>
       </div>
       <style jsx>{`
         .auth-container {
