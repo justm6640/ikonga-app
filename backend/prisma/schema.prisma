@@ -22,3 +22,21 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
+
+model Menu {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  phase       String
+  day         Int?
+  createdAt   DateTime @default(now())
+}
+
+model Recipe {
+  id        String   @id @default(uuid())
+  title     String
+  ingredients Json
+  steps     Json
+  phase     String?
+  createdAt DateTime @default(now())
+}

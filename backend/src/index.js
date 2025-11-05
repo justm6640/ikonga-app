@@ -5,10 +5,12 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 import { authMiddlewareFactory } from './middleware/auth.js';
+import { createNutritionRouter } from './nutrition.routes.js';
 
 const app = express();
 const prisma = new PrismaClient();
 const authMiddleware = authMiddlewareFactory({ prisma });
+const apiRouter = express.Router();
 
 app.use(cors());
 app.use(express.json());
@@ -23,7 +25,7 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
 
-app.post('/auth/register', async (req, res) => {
+apiRouter.post('/auth/register', async (req, res) => {
   const { email, password, role = 'subscriber', phase_current: phaseCurrent = '' } = req.body ?? {};
 
   if (!email || !password) {
@@ -68,7 +70,7 @@ app.post('/auth/register', async (req, res) => {
   }
 });
 
-app.post('/auth/login', async (req, res) => {
+apiRouter.post('/auth/login', async (req, res) => {
   const { email, password } = req.body ?? {};
 
   if (!email || !password) {
@@ -107,9 +109,13 @@ app.post('/auth/login', async (req, res) => {
   }
 });
 
-app.get('/me', authMiddleware, async (req, res) => {
+apiRouter.get('/me', authMiddleware, async (req, res) => {
   return res.json({ user: req.user });
 });
+
+apiRouter.use(createNutritionRouter({ prisma, authMiddleware }));
+
+app.use('/api', apiRouter);
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
