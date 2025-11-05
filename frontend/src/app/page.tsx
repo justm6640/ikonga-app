@@ -1,14 +1,15 @@
 export default function HomePage() {
   return (
-    <main className="container">
+    <section className="page-card">
       <h1>Bienvenue sur Ikonga</h1>
       <p>
-        Cette application Next.js 15 sert de point de départ pour le frontend de la
-        plateforme Ikonga.
+        Votre compagnon bien-être pour suivre vos routines beauté, nutrition et fitness tout en
+        restant en contact avec votre coach.
       </p>
       <p>
-        Modifiez <code>src/app/page.tsx</code> pour commencer à construire votre interface.
+        Connectez-vous pour accéder à votre tableau de bord personnalisé, découvrez vos menus
+        nutritionnels et suivez vos progrès au quotidien.
       </p>
-    </main>
+    </section>
   );
 }
