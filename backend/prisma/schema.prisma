@@ -7,12 +7,63 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password      String
+  role          UserRole @default(subscriber)
+  phase_current String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  photos        BeautyPhoto[]
+  sentMessages  CoachMessage[] @relation("CoachMessagesFrom")
+  receivedMessages CoachMessage[] @relation("CoachMessagesTo")
+  progressEntries Progress[]
+}
+
 enum UserRole {
   subscriber
   coach
   admin
 }
 
+model BeautyRoutine {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  phase       String
+  createdAt   DateTime @default(now())
+}
+
+model BeautyPhoto {
+  id       String   @id @default(uuid())
+  userId   String
+  imageUrl String
+  takenAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model CoachMessage {
+  id         String   @id @default(uuid())
+  fromUserId String
+  toUserId   String
+  content    String
+  createdAt  DateTime @default(now())
+
+  fromUser User @relation("CoachMessagesFrom", fields: [fromUserId], references: [id])
+  toUser   User @relation("CoachMessagesTo", fields: [toUserId], references: [id])
+}
+
+model Progress {
+  id        String   @id @default(uuid())
+  userId    String
+  weight    Float?
+  notes     String?
+  phase     String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
 model User {
   id           String       @id @default(uuid())
   email        String       @unique
