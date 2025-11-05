@@ -7,8 +7,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Example {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password      String
+  role          UserRole @default(subscriber)
+  phase_current String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+enum UserRole {
+  subscriber
+  coach
+  admin
 }
