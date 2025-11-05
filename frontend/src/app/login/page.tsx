@@ -133,29 +133,27 @@ export default function LoginPage() {
           align-items: center;
           justify-content: center;
           padding: 3rem 1.5rem 4rem;
-          background: radial-gradient(circle at top right, rgba(250, 134, 98, 0.14), transparent 60%),
-            radial-gradient(circle at bottom left, rgba(250, 134, 98, 0.1), transparent 55%),
-            #fdeee6;
+          background: linear-gradient(160deg, #ede9ff 0%, #f6f2ff 50%, #ffffff 100%);
         }
 
         .login-card {
           width: min(440px, 100%);
           background: #ffffff;
-          border-radius: 28px;
-          box-shadow: 0 28px 65px rgba(250, 134, 98, 0.22);
-          padding: 3rem 3rem 3.25rem;
+          border-radius: 24px;
+          box-shadow: 0 24px 55px rgba(124, 58, 237, 0.22);
+          padding: 2.75rem 2.5rem 3rem;
           display: flex;
           flex-direction: column;
           gap: 1.75rem;
         }
 
-        .login-logo {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          color: #fa8662;
-          font-weight: 700;
-          letter-spacing: 0.5rem;
+        .back-link {
+          align-self: flex-start;
+          font-size: 0.95rem;
+          font-weight: 500;
+          color: #7c3aed;
+          text-decoration: none;
+          transition: opacity 0.2s ease;
         }
 
         .logo-mark {
@@ -177,13 +175,14 @@ export default function LoginPage() {
 
         h1 {
           margin: 0;
-          font-size: clamp(1.9rem, 4vw, 2.4rem);
-          color: #333333;
+          font-size: clamp(1.9rem, 3vw, 2.4rem);
+          font-weight: 600;
+          color: #1f1636;
         }
 
         .login-intro {
           margin: 0;
-          color: #5c5a57;
+          color: #5d5277;
           line-height: 1.6;
         }
 
@@ -194,13 +193,12 @@ export default function LoginPage() {
 
         label {
           font-size: 0.95rem;
-          font-weight: 600;
-          color: #4a4947;
-          display: grid;
-          gap: 0.5rem;
+          font-weight: 500;
+          color: #1f1636;
         }
 
         input {
+          border: 1px solid #e4daff;
           border-radius: 14px;
           border: 1px solid #f5cdbb;
           padding: 0.85rem 1rem;
@@ -210,8 +208,8 @@ export default function LoginPage() {
 
         input:focus {
           outline: none;
-          border-color: #fa8662;
-          box-shadow: 0 0 0 3px rgba(250, 134, 98, 0.18);
+          border-color: #7c3aed;
+          box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.18);
         }
 
         .login-error {
@@ -223,8 +221,9 @@ export default function LoginPage() {
         .login-button {
           background: linear-gradient(135deg, #fa8662, #f56b3f);
           border-radius: 999px;
-          padding: 0.95rem 1.5rem;
-          font-size: 1.05rem;
+          padding: 0.9rem 1.6rem;
+          background: #7c3aed;
+          color: white;
           font-weight: 600;
           border: none;
           color: white;
@@ -233,7 +232,7 @@ export default function LoginPage() {
 
         .login-button:hover:not(:disabled) {
           transform: translateY(-1px);
-          box-shadow: 0 18px 35px rgba(250, 134, 98, 0.26);
+          box-shadow: 0 18px 36px rgba(124, 58, 237, 0.28);
         }
 
         .login-button:disabled {

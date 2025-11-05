@@ -1,13 +1,12 @@
 :root {
-  --color-primary: #fa8662;
-  --color-primary-dark: #e66d47;
-  --color-background: #fdeee6;
+  --color-primary: #7c3aed;
+  --color-background: #f5f0ff;
   --color-surface: #ffffff;
-  --color-text: #333333;
-  --color-muted: #5c5a57;
-  --color-border: #f5cdbb;
+  --color-text: #1f1636;
+  --color-muted: #5d5277;
+  --color-border: #e4daff;
   --radius-lg: 20px;
-  --shadow-soft: 0 22px 45px rgba(250, 134, 98, 0.18);
+  --shadow-soft: 0 20px 45px rgba(124, 58, 237, 0.18);
   color-scheme: light;
 }
 
@@ -34,8 +33,7 @@ a {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: radial-gradient(circle at top left, rgba(250, 134, 98, 0.12), transparent 55%),
-    radial-gradient(circle at bottom right, rgba(250, 134, 98, 0.08), transparent 55%),
+  background: linear-gradient(180deg, rgba(124, 58, 237, 0.08) 0%, rgba(255, 255, 255, 0) 55%),
     var(--color-background);
 }
 
@@ -91,7 +89,7 @@ a {
 
 .nav-link:hover,
 .nav-link:focus-visible {
-  background: rgba(250, 134, 98, 0.12);
+  background: rgba(124, 58, 237, 0.12);
   color: var(--color-primary);
   transform: translateY(-1px);
 }
@@ -179,7 +177,7 @@ input {
 input:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(250, 134, 98, 0.18);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
 }
 
 button {
@@ -196,7 +194,7 @@ button {
 
 button:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 15px 30px rgba(250, 134, 98, 0.25);
+  box-shadow: 0 15px 30px rgba(124, 58, 237, 0.25);
 }
 
 button:disabled {
