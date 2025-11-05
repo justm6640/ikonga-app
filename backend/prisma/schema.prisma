@@ -169,6 +169,7 @@ model Habit {
   id          String      @id @default(uuid())
   name        String
   description String?
+
   userHabits  UserHabit[]
 }
 
