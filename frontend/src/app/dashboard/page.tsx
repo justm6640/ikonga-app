@@ -1,89 +1,133 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-interface UserProfile {
-  id: string;
-  email: string;
-  role: string;
-  phase_current?: string | null;
-}
-
-interface ProfileResponse {
-  user?: UserProfile;
-  message?: string;
+interface StoredUser {
+  email?: string;
+  role?: string;
+  phase?: string;
+  phase_current?: string;
+  [key: string]: unknown;
 }
 
 export default function DashboardPage() {
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const [user, setUser] = useState<StoredUser | null>(null);
 
   useEffect(() => {
-    const controller = new AbortController();
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-
-    if (!token) {
-      setError('Vous devez être connecté pour accéder au tableau de bord.');
-      setLoading(false);
-      return () => {
-        controller.abort();
-      };
+    if (typeof window === 'undefined') {
+      return;
     }
 
-    (async () => {
+    const token = localStorage.getItem('ikonga_token');
+
+    if (!token) {
+      router.replace('/login');
+      return;
+    }
+
+    const storedUser = localStorage.getItem('ikonga_user');
+
+    if (storedUser) {
       try {
-        const response = await fetch('http://localhost:4000/auth/me', {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          signal: controller.signal,
-        });
-
-        const data: ProfileResponse = await response.json().catch(() => ({}));
-
-        if (!response.ok || !data.user) {
-          const message = data.message ?? 'Impossible de charger votre profil.';
-          throw new Error(message);
-        }
-
-        setProfile(data.user);
-      } catch (profileError) {
-        if (profileError instanceof DOMException && profileError.name === 'AbortError') {
-          return;
-        }
-        const message = profileError instanceof Error ? profileError.message : undefined;
-        setError(message ?? 'Une erreur inattendue est survenue.');
-      } finally {
-        setLoading(false);
+        const parsed = JSON.parse(storedUser) as StoredUser;
+        setUser(parsed);
+      } catch (error) {
+        console.error('Impossible de parser ikonga_user depuis le stockage local', error);
+        setUser(null);
       }
-    })();
+    }
+  }, [router]);
 
-    return () => {
-      controller.abort();
-    };
-  }, []);
+  const phase = useMemo(() => {
+    if (!user) {
+      return 'Non renseignée';
+    }
+
+    if (typeof user.phase === 'string' && user.phase.trim().length > 0) {
+      return user.phase;
+    }
+
+    if (typeof user.phase_current === 'string' && user.phase_current.trim().length > 0) {
+      return user.phase_current;
+    }
+
+    return 'Non renseignée';
+  }, [user]);
+
+  const role = useMemo(() => {
+    if (!user) {
+      return 'Membre';
+    }
+
+    if (typeof user.role === 'string' && user.role.trim().length > 0) {
+      return user.role;
+    }
+
+    return 'Membre';
+  }, [user]);
+
+  const email = useMemo(() => {
+    if (!user) {
+      return 'membre';
+    }
+
+    if (typeof user.email === 'string' && user.email.trim().length > 0) {
+      return user.email;
+    }
+
+    return 'membre';
+  }, [user]);
 
   return (
-    <section className="page-card">
-      <h1>Tableau de bord</h1>
-      {loading ? <p>Chargement de vos informations...</p> : null}
-      {!loading && error ? (
-        <div className="status-message error" role="alert">
-          {error}
+    <section className="page-card" role="main">
+      <div className="dashboard-heading">
+        <h1>Bonjour {email}</h1>
+        <p>
+          Retrouve un aperçu de ta progression bien-être, tes recommandations sur-mesure et les
+          prochaines actions proposées par ton coach.
+        </p>
+      </div>
+
+      <div className="dashboard-meta">
+        <div className="meta-tile">
+          <span>Phase actuelle</span>
+          <strong>{phase}</strong>
         </div>
-      ) : null}
-      {!loading && !error && profile ? (
-        <div>
-          <p>Bonjour {profile.email}</p>
-          {profile.phase_current ? (
-            <p>Phase actuelle : {profile.phase_current}</p>
-          ) : (
-            <p>Vous n'avez pas encore défini de phase.</p>
-          )}
+        <div className="meta-tile">
+          <span>Rôle</span>
+          <strong>{role}</strong>
         </div>
-      ) : null}
+        <div className="meta-tile">
+          <span>Statut</span>
+          <strong>Actif</strong>
+        </div>
+      </div>
+
+      <div className="dashboard-grid">
+        <article className="dashboard-card">
+          <h3>Nutrition</h3>
+          <p>
+            Explore tes plans nutritionnels personnalisés, des recettes équilibrées et des conseils
+            pour maintenir ton énergie tout au long de la semaine.
+          </p>
+        </article>
+        <article className="dashboard-card">
+          <h3>Fitness</h3>
+          <p>
+            Suis tes entraînements, mesure ta progression et découvre des séances adaptées à ton
+            niveau et à tes objectifs.
+          </p>
+        </article>
+        <article className="dashboard-card">
+          <h3>Bien-être</h3>
+          <p>
+            Accède à des routines de relaxation, des astuces sommeil et des pratiques mindfulness
+            pour équilibrer corps et esprit.
+          </p>
+        </article>
+      </div>
     </section>
   );
 }
