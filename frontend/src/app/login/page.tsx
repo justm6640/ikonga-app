@@ -22,7 +22,7 @@ export default function LoginPage() {
       return;
     }
 
-    const existingToken = localStorage.getItem('ikonga_token');
+    const existingToken = localStorage.getItem('token');
     if (existingToken) {
       router.replace('/');
     }
@@ -63,7 +63,7 @@ export default function LoginPage() {
       }
 
       if (typeof window !== 'undefined') {
-        localStorage.setItem('ikonga_token', data.token);
+        localStorage.setItem('token', data.token);
         localStorage.setItem('ikonga_user', JSON.stringify(data.user ?? {}));
       }
 
