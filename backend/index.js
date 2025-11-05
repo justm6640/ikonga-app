@@ -28,7 +28,8 @@ app.use('/beauty', beautyRouter);
 app.use('/coaching', coachingRouter);
 
 app.post('/auth/register', async (req, res) => {
-  const { email, password, role = 'subscriber', phase_current = '' } = req.body ?? {};
+  const { email, password, phase_current = '' } = req.body ?? {};
+  const defaultRole = 'subscriber';
 
   if (!email || !password) {
     return res.status(400).json({ message: 'Email and password are required' });
@@ -41,7 +42,7 @@ app.post('/auth/register', async (req, res) => {
       data: {
         email,
         password: hashedPassword,
-        role,
+        role: defaultRole,
         phase_current,
       },
     });
